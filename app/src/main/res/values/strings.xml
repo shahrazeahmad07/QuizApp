@@ -5,4 +5,6 @@
     <string name="please_enter_your_name">Please Enter your name.</string>
     <string name="name">e.g. Shahzaib</string>
     <string name="start">Start</string>
+    <string name="flag_image">Flag Image</string>
+    <string name="submit">Submit</string>
 </resources>
