@@ -4,9 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/SoftwareEngineering/android/QuizApp/app/src/main/res/drawable/default_option_border_bg.xml" value="0.2115" />
+        <entry key="..\:/SoftwareEngineering/android/QuizApp/app/src/main/res/drawable/right_option_border_bg.xml" value="0.205" />
         <entry key="..\:/SoftwareEngineering/android/QuizApp/app/src/main/res/drawable/selected_option_border_bg.xml" value="0.2115" />
+        <entry key="..\:/SoftwareEngineering/android/QuizApp/app/src/main/res/drawable/wrong_option_border_bg.xml" value="0.205" />
         <entry key="..\:/SoftwareEngineering/android/QuizApp/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/SoftwareEngineering/android/QuizApp/app/src/main/res/layout/activity_quiz_questions.xml" value="0.25" />
+        <entry key="..\:/SoftwareEngineering/android/QuizApp/app/src/main/res/layout/activity_result.xml" value="0.20416666666666666" />
       </map>
     </option>
   </component>

@@ -1,8 +1,10 @@
 package com.uet.quizapp
 
+import android.content.Intent
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 
@@ -20,9 +22,12 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var btnSubmit : Button
 
     //! Other variables
+    private lateinit var userName: String
     private var mCurrentPosition = 1
     private lateinit var mQuestionsList : ArrayList<Question>
     private var mSelectedOptionPosition = 0
+    private var answerFlag = 0
+    private var score = 0
 
     //! On Create Method.
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +45,9 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
         tvOptionFour = findViewById(R.id.tvOptionFour)
         btnSubmit = findViewById(R.id.btnSubmit)
 
+        //! fetching user name from intent data
+        userName  = intent.getStringExtra(Constants.USER_NAME).toString()
+
         //! fetching questionsList from Constants class
         mQuestionsList = Constants.getQuestions()
 
@@ -56,6 +64,7 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
 
     //! Setting Questions.
     private fun setQuestion() {
+        defaultOptionsView()
         val questionObject = mQuestionsList[mCurrentPosition - 1]
 
         tvQuestion.text = questionObject.question
@@ -92,6 +101,27 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
+    //! Submit Button Text View coloring.
+    private fun submitButtonColor(question: Question) {
+        if (mSelectedOptionPosition != question.correctOption) {
+            when(mSelectedOptionPosition) {
+                1 -> tvOptionOne.setBackgroundResource(R.drawable.wrong_option_border_bg)
+                2 -> tvOptionTwo.setBackgroundResource(R.drawable.wrong_option_border_bg)
+                3 -> tvOptionThree.setBackgroundResource(R.drawable.wrong_option_border_bg)
+                4 -> tvOptionFour.setBackgroundResource(R.drawable.wrong_option_border_bg)
+            }
+        }
+        else {
+            score += 1
+        }
+        when(question.correctOption) {
+            1 -> tvOptionOne.setBackgroundResource(R.drawable.right_option_border_bg)
+            2 -> tvOptionTwo.setBackgroundResource(R.drawable.right_option_border_bg)
+            3 -> tvOptionThree.setBackgroundResource(R.drawable.right_option_border_bg)
+            4 -> tvOptionFour.setBackgroundResource(R.drawable.right_option_border_bg)
+        }
+    }
+
     //! On click Events
     override fun onClick(view: View?) {
         when(view?.id) {
@@ -100,7 +130,40 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
             R.id.tvOptionThree -> selectedOptionView(tvOptionThree, 3)
             R.id.tvOptionFour -> selectedOptionView(tvOptionFour, 4)
             R.id.btnSubmit -> {
-
+                val question = mQuestionsList[mCurrentPosition-1]
+                if (answerFlag == 0) {
+                    if (mSelectedOptionPosition == 0) {
+                        Toast.makeText(this, "Select an Option First", Toast.LENGTH_SHORT).show()
+                    }
+                    else {
+                        submitButtonColor(question)
+                        answerFlag = 1
+                        if (mCurrentPosition < mQuestionsList.size) {
+                            mCurrentPosition++
+                            mSelectedOptionPosition = 0
+                            btnSubmit.text = getString(R.string.btnNextQuestion)
+                        }
+                        else {
+                            btnSubmit.text = getString(R.string.finish)
+                        }
+                    }
+                }
+                else {
+                    if (btnSubmit.text != getString(R.string.finish)) {
+                        setQuestion()
+                        answerFlag = 0
+                        mSelectedOptionPosition = 0
+                        btnSubmit.text = getString(R.string.submit)
+                    }
+                    else {
+                        val intent = Intent(this, ResultActivity::class.java)
+                        intent.putExtra(Constants.USER_NAME, userName)
+                        intent.putExtra(Constants.SCORE, score)
+                        intent.putExtra(Constants.TOTAL_QUESTIONS, mQuestionsList.size)
+                        startActivity(intent)
+                        finish()
+                    }
+                }
             }
         }
     }
